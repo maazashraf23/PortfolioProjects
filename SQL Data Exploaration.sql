@@ -137,15 +137,16 @@ order by 1
 
 
 --Total Population vs New Vaccinations per day
+-- Shows Percentage of Population that has recieved at least one Covid Vaccine
 SELECT DISTINCT
 	dea.location,
 	dea.date,
 	dea.population,
-	vac.new_vaccinations
-	--SUM(CONVERT(bigint,vac.new_vaccinations)) 
-	--	OVER (
-	--		PARTITION BY dea.location
-	--		ORDER BY dea.location,dea.date) AS RollingPeopleVaccinated
+	vac.new_vaccinations,
+	SUM(CONVERT(bigint,vac.new_vaccinations)) 
+		OVER (
+			PARTITION BY dea.location
+			ORDER BY dea.location,dea.date) AS RollingPeopleVaccinated
 	--CONCAT(SUM(CAST(ISNULL(vac.new_vaccinations,'0') as bigint))/	MAX(dea.population)*100,'%' ) as PercentageVaccinated
 FROM PortfolioProject..CovidDeaths AS dea
 Join PortfolioProject..CovidVaccinations AS vac
